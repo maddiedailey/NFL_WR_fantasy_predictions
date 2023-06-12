@@ -4,10 +4,11 @@ import pandas as pd
 import numpy as np
 import matplotlib as plt
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import confusion_matrix
+from sklearn.metrics import mean_squared_error
 
 
 DATA = "/Users/maddiedailey/Desktop/wr.csv"
+
 
 def data_processing(data, output):
     """
@@ -26,24 +27,34 @@ def main():
     # read in dataset
     data = pd.read_csv(DATA)
 
+    # remove categorical data
+    data = data.drop("Name", axis = 1)
+    data = data.drop("Week", axis = 1)
+
     # train two models for each of our performance metrics
-    td_x_train, td_x_test, td_y_train, td_y_test = data_processing(data, "TD")
-    ry_x_train, ry_x_test, ry_y_train, ry_y_test = data_processing(data, "Receiving.Yards")
+    td_x_train, td_x_test, td_y_train, td_y_test = data_processing(data, "Receiving.TDs.x")
+    ry_x_train, ry_x_test, ry_y_train, ry_y_test = data_processing(data, "Receiving.Yards.x")
+
+    print("Fitting Model...")
 
     td_gam = LinearGAM().fit(td_x_train, td_y_train)
     ry_gam = LinearGAM().fit(ry_x_train, ry_y_train)
 
+    print("TD Model: ")
+    print(td_gam.summary())
+    print("Recieving Yards Model: ")
+    print(ry_gam.summary())
+
     td_y_pred = td_gam.predict(td_x_test)
     ry_y_pred = ry_gam.predict(ry_x_test)
 
-    print(td_gam.summary())
-    print(ry_gam.summary())
+    td_mse = mean_squared_error(td_y_test, td_y_pred)
+    ry_mse = mean_squared_error(ry_y_test, ry_y_pred)
 
-    td_metrics = confusion_matrix(td_y_test, td_y_pred)
-    ry_metrics = confusion_matrix(ry_y_test, ry_y_pred)
-
-    print(td_metrics)
-    print(ry_metrics)
+    print("TD Model Performance: (MSE)")
+    print(td_mse)
+    print("Recieving Yards Model Performance: (MSE)")
+    print(ry_mse)
 
 
 
