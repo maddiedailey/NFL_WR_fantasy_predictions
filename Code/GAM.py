@@ -81,6 +81,20 @@ def main():
     print(ry_mse)
 
 
+    corr_matrix = np.corrcoef(td_y_test, td_y_pred)
+    corr = corr_matrix[0,1]
+    td_R_sq = corr**2
+    
+    print("TD R2: \n")
+    print(td_R_sq)
+
+    corr_matrix = np.corrcoef(ry_y_test, ry_y_pred)
+    corr = corr_matrix[0,1]
+    ry_R_sq = corr**2
+    
+    print("RY R2: \n")
+    print(ry_R_sq)
+
     # PLOTS ########
     # Create TD plots
     plt.scatter(td_y_test, td_y_pred, color='blue', alpha=1, label='TD Data Points')
