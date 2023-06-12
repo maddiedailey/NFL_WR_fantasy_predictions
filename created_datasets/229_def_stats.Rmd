@@ -1,0 +1,37 @@
+---
+title: "229 feats"
+author: "Maddie Dailey"
+date: "2023-06-11"
+output: html_document
+---
+
+```{r}
+stats = read.csv("/Users/maddiedailey/Desktop/Game_Logs_Wide_Receiver_and_Tight_End.csv")
+stats <- stats %>%
+  mutate_all(~ ifelse(. == "--", 0, .))
+stats <- stats %>%
+  mutate(Receiving.Yards = as.integer(Receiving.Yards))
+```
+
+```{r}
+library(dplyr)
+
+def_stats = stats %>% group_by(Opponent, Week, Year) %>% summarize(total_receiving_yards_allowed = sum(Receiving.Yards))
+
+def_stats<- def_stats %>%
+  filter(Opponent != "APR")
+```
+
+```{r}
+library(zoo)
+
+def_stats_rolling_sum <- def_stats %>%
+  arrange(Year, Opponent, Week) %>% group_by(Opponent) %>%
+  mutate(sum_receiving_yards_4wks = rollsum(total_receiving_yards_allowed, k = 4, fill = NA, align = "right"))
+```
+
+
+```{r}
+write.csv(def_stats, "/Users/maddiedailey/Desktop/Defensive_stats.csv")
+```
+
