@@ -7,6 +7,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 import csv
 
+# Filepath to dataset
 DATA = "/Users/maddiedailey/Desktop/wr.csv"
 
 
@@ -63,9 +64,9 @@ def main():
 
     ######################
 
-    print("TD Model: ")
+    print("\nTD Model: \n")
     print(td_gam.summary())
-    print("Recieving Yards Model: ")
+    print("\nRecieving Yards Model: \n")
     print(ry_gam.summary())
 
     td_y_pred = td_gam.predict(td_x_test)
@@ -74,9 +75,9 @@ def main():
     td_mse = mean_squared_error(td_y_test, td_y_pred)
     ry_mse = mean_squared_error(ry_y_test, ry_y_pred)
 
-    print("TD Model Performance: (MSE)")
+    print("\nTD Model Performance: (MSE)\n")
     print(td_mse)
-    print("Recieving Yards Model Performance: (MSE)")
+    print("\nRecieving Yards Model Performance: (MSE)\n")
     print(ry_mse)
 
 
