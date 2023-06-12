@@ -1,5 +1,5 @@
 import sys
-from pygam import LinearGAM, s, f, te
+from pygam import LinearGAM, PoissonGAM, s, f, te
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -38,7 +38,9 @@ def main():
 
     print("Fitting Model...")
 
-    td_gam = LinearGAM().fit(td_x_train, td_y_train)
+    td_gam = PoissonGAM().fit(td_x_train, td_y_train)
+    #td_gam = LinearGAM().fit(td_x_train, td_y_train)
+
     ry_gam = LinearGAM().fit(ry_x_train, ry_y_train)
 
     # OPTIMIZATION #####
@@ -78,13 +80,23 @@ def main():
     print(ry_mse)
 
 
+    # PLOTS ########
     # Create TD plots
-    # plt.scatter(td_y_test, td_y_pred, color='blue', alpha=0.5, label='TD Data Points')
+    plt.scatter(td_y_test, td_y_pred, color='blue', alpha=1, label='TD Data Points')
 
-    # # Add a red line overlaying the plot
-    # plt.plot([min(td_y_test), max(td_y_test)], [min(td_y_test), max(td_y_test)], color='red', linestyle='-', linewidth=2, label='Ideal')
+    # Add a red line overlaying the plot
+    plt.plot([min(td_y_test), max(td_y_test)], [min(td_y_test), max(td_y_test)], color='red', linestyle='-', linewidth=2, label='Ideal')
     
-    # # Set labels and title
+    # Set labels and title
+    plt.xlabel('True TD Values')
+    plt.ylabel('Predicted TD Values')
+    plt.title('Scatter Plot: True vs. Predicted')
+
+    # Display the plot
+    plt.show()
+
+    # plt.boxplot(box_mat)
+
     # plt.xlabel('True TD Values')
     # plt.ylabel('Predicted TD Values')
     # plt.title('Scatter Plot: True vs. Predicted')
@@ -105,6 +117,7 @@ def main():
 
     # # Display the plot
     # plt.show()
+    ###################
 
 
 
