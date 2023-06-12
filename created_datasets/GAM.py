@@ -6,7 +6,6 @@ import matplotlib as plt
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 
-
 DATA = "/Users/maddiedailey/Desktop/wr.csv"
 
 
@@ -30,6 +29,7 @@ def main():
     # remove categorical data
     data = data.drop("Name", axis = 1)
     data = data.drop("Week", axis = 1)
+    #data = data.drop("total_receiving_yards_allowed", axis=1)
 
     # train two models for each of our performance metrics
     td_x_train, td_x_test, td_y_train, td_y_test = data_processing(data, "Receiving.TDs.x")
@@ -38,7 +38,23 @@ def main():
     print("Fitting Model...")
 
     td_gam = LinearGAM().fit(td_x_train, td_y_train)
-    ry_gam = LinearGAM().fit(ry_x_train, ry_y_train)
+    #ry_gam = LinearGAM().fit(ry_x_train, ry_y_train)
+
+    # Perform cross-validation for each df value
+    # lam_values = [0.01, 0.1, 0.5, 0.6, 0.8]
+    # cv_scores = []
+    # for lam in lam_values:
+    #     gam = LinearGAM(s(0) + te(1,3) + te(2,5) + s(4) + s(5) + s(6) + te(7,8) + s(9) + s(10) + s(11)).fit(ry_x_train, ry_y_train)
+    #     y_pred = gam.predict(ry_x_test)
+    #     mse = mean_squared_error(ry_y_test, y_pred)
+    #     cv_scores.append(mse)
+
+    # # Find the optimal df value with the lowest MSE
+    # optimal_lam = lam_values[np.argmin(cv_scores)]
+    # print("Optimal Lambda:", optimal_lam)
+
+    ry_gam = LinearGAM(s(0) + te(1,3) + te(2,5) + s(4) + s(5) + s(6) + te(7,8) + s(9) + 
+                       s(10) + s(11) + s(12)).fit(ry_x_train, ry_y_train)
 
     print("TD Model: ")
     print(td_gam.summary())
